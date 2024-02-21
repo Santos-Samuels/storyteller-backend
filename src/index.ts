@@ -1,3 +1,4 @@
+import { foo } from "@/foo/foo";
 import express, { Request, Response, Router } from "express";
 
 const app = express();
@@ -5,6 +6,7 @@ const route = Router();
 
 app.use(express.json());
 
+console.log(foo);
 route.get("/", (req: Request, res: Response) => {
   res.json({ message: "hello world with Typescript" });
 });
