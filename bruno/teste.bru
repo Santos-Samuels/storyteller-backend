@@ -1,0 +1,17 @@
+meta {
+  name: teste
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseURL}}/chat
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "theme": "matemática discreta"
+  }
+}
