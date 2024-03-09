@@ -14,7 +14,6 @@ export class CreateStoryUsecase
 
   execute = async (params: CreateStoryDTO) => {
     const { theme } = params;
-    console.log("🚀 ~ execute= ~ theme:", theme);
 
     const openAI = this.chatGPTApiClient.getClient();
     const response = await openAI.chat.completions.create({

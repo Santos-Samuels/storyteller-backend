@@ -13,7 +13,7 @@ export class StoryController {
     try {
       const { theme } = await validateCreateStoryBody(req.body);
       const story = await this.createStoryUsecase.execute({
-        theme: theme,
+        theme,
       });
 
       return res.send(story).status(201);
