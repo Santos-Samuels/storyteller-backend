@@ -1,12 +1,17 @@
 import { BaseUsecase } from "@/application/entities/base-usecase";
-import { CreateStoryDTO } from "@/application/entities/dto/create-story.dto";
-import { GPTStory } from "@/application/entities/dto/gpt-story.dto";
+import {
+  CreateStoryDTO,
+  CreateStoryResponse,
+} from "@/application/entities/dto/create-story.dto";
 import { Request, Response } from "express";
 import { validateCreateStoryBody } from "./schema/create.story.schema";
 
 export class StoryController {
   constructor(
-    private readonly createStoryUsecase: BaseUsecase<CreateStoryDTO, GPTStory>
+    private readonly createStoryUsecase: BaseUsecase<
+      CreateStoryDTO,
+      CreateStoryResponse
+    >
   ) {}
 
   create = async (req: Request, res: Response) => {

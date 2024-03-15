@@ -9,14 +9,16 @@ export const storyOutputFormatPrompt = `export type EmotionTypes =
 
 export type ScenePosition = "left" | "right";
 
-export interface IHistory {
+export interface IStory {
 theme: string;
-resume: string;
+summary: string;
 ramifications?: string[];
+isRamification?: boolean;
 }
 
 export interface IScene {
 speech: string;
 emotion: EmotionTypes;
 position: ScenePosition;
+ramificationTheme?: string;
 }`;

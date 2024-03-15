@@ -4,8 +4,9 @@ import { User } from "./user.entity";
 export interface IStory extends BaseEntity {
   userId: User["id"];
   theme: string;
-  resume: string;
+  summary: string;
   ramifications?: string[];
+  isRamification?: boolean;
 
   user?: User;
 }
