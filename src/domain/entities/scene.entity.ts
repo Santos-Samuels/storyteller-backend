@@ -16,13 +16,12 @@ export type ScenePosition = "left" | "right";
 export interface IScene extends BaseEntity {
   storyId: IStory["id"];
   caracterId: ICaracter["id"];
-  caracterSpriteRef: string; // baseSpriteRef + emotion
+  caracterSpriteUrl: string; // baseSpriteRef + emotion
   speech: string;
   emotion: EmotionTypes;
   position: ScenePosition;
-  backgroundRef: string;
+  backgroundUrl: string;
   ramificationTheme?: string;
 
   caracter?: ICaracter;
-  story?: IStory;
 }

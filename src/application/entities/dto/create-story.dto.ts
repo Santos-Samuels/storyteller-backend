@@ -1,4 +1,3 @@
-import { IGPTStory } from "@/domain/entities/gpt-story";
 import { IStory } from "@/domain/entities/story.entity";
 
 export interface CreateStoryDTO {
@@ -6,6 +5,6 @@ export interface CreateStoryDTO {
 }
 
 export interface CreateStoryResponse {
-  mainStory: IGPTStory;
-  ramificationsStories: IGPTStory[];
+  mainStory: IStory;
+  ramificationsStories: IStory[];
 }

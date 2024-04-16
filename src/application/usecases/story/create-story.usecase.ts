@@ -4,15 +4,36 @@ import {
   CreateStoryResponse,
 } from "@/application/entities/dto/create-story.dto";
 import { storyOutputFormatPrompt } from "@/application/prompts/story-output-format.prompt";
+import { ICaracter } from "@/domain/entities/caracter.entity";
 import { IGPTStory } from "@/domain/entities/gpt-story";
+import { IScene } from "@/domain/entities/scene.entity";
+import { IStory } from "@/domain/entities/story.entity";
 import { ChatGPTApiClient } from "@/infra/chatGPT/chat-gpt-api-client";
 import { ChatCompletionCreateParams } from "openai/resources";
+import { v4 as uuidv4 } from "uuid";
 import { CreateStoryRamificationUsecase } from "./create-story-ramification";
+
+const caracters: ICaracter[] = [
+  {
+    id: uuidv4(),
+    baseSpriteRef:
+      "https://png.pngtree.com/png-clipart/20220404/original/pngtree-d-rendering-male-character-profile-or-avatar-happy-young-man-with-png-image_7512919.png",
+    name: "Caracter 1",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: uuidv4(),
+    baseSpriteRef:
+      "https://png.pngtree.com/png-clipart/20220424/original/pngtree-d-rendering-cute-female-character-avatar-wearing-teal-turtle-neck-and-png-image_7555239.png",
+    name: "Caracter 2",
+    created_at: new Date().toISOString(),
+  },
+];
 
 export class CreateStoryUsecase
   implements BaseUsecase<CreateStoryDTO, CreateStoryResponse>
 {
-  private amountOfScenes = 20;
+  private amountOfScenes = 30;
 
   constructor(
     private readonly chatGPTApiClient: ChatGPTApiClient,
@@ -54,7 +75,12 @@ export class CreateStoryUsecase
       conversationHistory
     );
 
-    return { mainStory, ramificationsStories };
+    const formattedData = this.formatStory(
+      mainStoryWithRamificationTheme,
+      ramificationsStories
+    );
+
+    return formattedData;
   };
 
   private getInitialConversation = ({
@@ -135,4 +161,82 @@ export class CreateStoryUsecase
 
     return Array.from(indexes);
   }
+
+  private formatStory = (
+    mainGPTStory: IGPTStory,
+    ramificationsGPTStories: IGPTStory[]
+  ): CreateStoryResponse => {
+    const mainStory: IStory = {
+      id: uuidv4(),
+      userId: "1",
+      theme: mainGPTStory.theme,
+      summary: mainGPTStory.summary,
+      isRamification: false,
+      ramifications: mainGPTStory.ramifications,
+      created_at: new Date().toISOString(),
+    };
+
+    const formattedScenes: IScene[] = mainGPTStory.scenes.map((scene, i) => {
+      const caracter = caracters[i % 2];
+
+      return {
+        id: uuidv4(),
+        storyId: mainStory.id,
+        backgroundUrl: "background",
+        caracterId: caracter.id,
+        caracterSpriteUrl: caracter.baseSpriteRef,
+        speech: scene.speech,
+        emotion: scene.emotion,
+        position: scene.position,
+        ramificationTheme: scene.ramificationTheme,
+
+        caracter,
+        created_at: new Date().toISOString(),
+      } as IScene;
+    });
+
+    const ramificationsStories: IStory[] = ramificationsGPTStories.reduce(
+      (acc, ramificationStory, i) => {
+        const story: IStory = {
+          id: uuidv4(),
+          userId: "1",
+          theme: ramificationStory.theme,
+          summary: ramificationStory.summary,
+          isRamification: true,
+          ramifications: ramificationStory.ramifications,
+          created_at: new Date().toISOString(),
+        };
+
+        const scenes = ramificationStory.scenes.map((scene, i) => {
+          const caracter = caracters[i % 2];
+
+          return {
+            id: uuidv4(),
+            storyId: story.id,
+            backgroundUrl: "background",
+            caracterId: caracter.id,
+            caracterSpriteUrl: caracter.baseSpriteRef,
+            speech: scene.speech,
+            emotion: scene.emotion,
+            position: scene.position,
+            ramificationTheme: scene.ramificationTheme,
+
+            caracter: caracter,
+            created_at: new Date().toISOString(),
+          } as IScene;
+        });
+
+        return [...acc, { ...story, scenes }];
+      },
+      [] as IStory[]
+    );
+
+    return {
+      mainStory: {
+        ...mainStory,
+        scenes: formattedScenes,
+      },
+      ramificationsStories,
+    };
+  };
 }
