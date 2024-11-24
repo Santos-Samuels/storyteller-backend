@@ -3,7 +3,7 @@ import { ISceneCharacter } from "./scene-caracter.entity";
 import { IUserInteraction } from "./user-interaction.entity";
 
 export interface IUserInteractionOption extends BaseEntity {
-  interactionId: IUserInteraction["id"];
+  userInteractionId: IUserInteraction["id"];
   nextSceneCharacteId: ISceneCharacter["id"];
 
   label: string;
