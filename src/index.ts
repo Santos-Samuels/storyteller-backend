@@ -2,8 +2,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import "reflect-metadata";
-import { dataSource, initializeDatabase } from "./infra/database/type-orm/typeorm.config";
 
+import connectPrismaDatabase from "./infra/database/prisma/prisma.config";
 import roleRoutes from "./infra/routes/express/role.routes";
 import storyRoutes from "./infra/routes/express/story.routes";
 import userRoutes from "./infra/routes/express/user.routes";
@@ -26,9 +26,12 @@ app.use("/api", storyRoutes);
 //   });
 // });
 
-initializeDatabase().then(() => {
-  console.log("🚀 ~ initializeDatabase ~ dataSource.isInitialized:", dataSource.isInitialized)
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+connectPrismaDatabase()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((_error) => {
+    process.exit(1);
   });
-});

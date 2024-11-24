@@ -1,0 +1,113 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model role {
+  id        String   @id() @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user      user[]
+}
+
+model user {
+  id              String            @id() @default(uuid())
+  name            String
+  email           String            @unique
+  password        String
+  roleId          String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  role            role              @relation(fields: [roleId], references: [id])
+  story           story[]
+  userInteraction userInteraction[]
+}
+
+model story {
+  id            String  @id() @default(uuid())
+  theme         String
+  title         String
+  into          String
+  summary       String
+  backgroundUrl String?
+  authorId      String
+
+  author         user             @relation(fields: [authorId], references: [id])
+  caracter       caracter[]
+  sceneCharacter sceneCharacter[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+enum CharacterPositionEnum {
+  LEFT
+  RIGHT
+  CENTER
+}
+
+model caracter {
+  id        String                @id() @default(uuid())
+  storyId   String
+  name      String
+  role      String
+  position  CharacterPositionEnum
+  avatarUrl String?
+
+  story          story            @relation(fields: [storyId], references: [id])
+  sceneCharacter sceneCharacter[]
+}
+
+enum CharacterEmotionEnum {
+  HAPPY
+  SAD
+  SURPRISED
+  THINKING
+  CONFUSED
+  VERY_HAPPY
+  NEUTRAL
+  FRUSTRATED
+  EXCITED
+}
+
+model sceneCharacter {
+  id         String               @id() @default(uuid())
+  caracterId String
+  storyId    String
+  order      Int
+  speech     String
+  emotion    CharacterEmotionEnum
+  avatarUrl  String?
+
+  caracter caracter @relation(fields: [caracterId], references: [id])
+  story    story    @relation(fields: [storyId], references: [id])
+  userInteraction userInteraction[]
+}
+
+model userInteractionOption {
+  id                  String @id() @default(uuid())
+  userInteractionId   String
+  nextScaneCaracterId String
+  label               String
+  feedback            String
+
+  userInteraction userInteraction? @relation(fields: [userInteractionId], references: [id])
+}
+
+model userInteraction {
+  id                      String @id() @default(uuid())
+  userId                  String
+  sceneCharacterId        String
+  userInteractionOptionId String
+  situation               String
+
+  user                  user                    @relation(fields: [userId], references: [id])
+  sceneCharacter        sceneCharacter          @relation(fields: [sceneCharacterId], references: [id])
+  userInteractionOption userInteractionOption[]
+}
