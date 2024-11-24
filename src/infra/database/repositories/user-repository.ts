@@ -1,34 +1,43 @@
+import { CreateUserDTO, UpdateUserDTO } from "@/domain/dtos/user.dto";
+import { IUser } from "@/domain/entities/user.entity";
 import { UserRepositoryInterface } from "@/domain/repositories/user-repository.interface";
-import { Repository } from "typeorm";
-import { User } from "../entities/user";
-import { dataSource } from "../type-orm/typeorm.config";
+import prisma from "../prisma/prisma";
 
 export class UserRepository implements UserRepositoryInterface {
-  private userRepository: Repository<User>;
-
-  constructor() {
-    this.userRepository = dataSource.getRepository("users");
-  }
+  private userRepository = prisma.user;
 
   getAllUsers = async () => {
-    return this.userRepository.find();
+    return this.userRepository.findMany();
   };
 
-  getUserById = async (id: string): Promise<User | undefined> => {
-    const user = await this.userRepository.findOne({ where: { id } });
-    return user ?? undefined;
+  getUserById = async (id: string): Promise<IUser | null> => {
+    return this.userRepository.findUnique({ where: { id } });
   };
 
-  createUser = async (user: User) => {
-    return this.userRepository.save(user);
+  getUserByEmail = async (email: string): Promise<IUser | null> => {
+    return this.userRepository.findUnique({
+      where: { email },
+      include: { role: true },
+      omit: { password: false },
+    });
   };
 
-  updateUser = async (id: string, user: User) => {
-    await this.userRepository.update(id, user);
-    return user;
+  createUser = async (data: CreateUserDTO) => {
+    return this.userRepository.create({
+      data,
+    });
+  };
+
+  updateUser = async ({ userId, name }: UpdateUserDTO) => {
+    return this.userRepository.update({
+      where: { id: userId },
+      data: {
+        name,
+      },
+    });
   };
 
   deleteUser = async (id: string) => {
-    await this.userRepository.delete(id);
+    await this.userRepository.delete({ where: { id } });
   };
 }

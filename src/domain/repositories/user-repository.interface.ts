@@ -1,9 +1,11 @@
-import { User } from "../entities/user.entity";
+import { CreateUserDTO, UpdateUserDTO } from "../dtos/user.dto";
+import { IUser } from "../entities/user.entity";
 
 export interface UserRepositoryInterface {
-  getAllUsers(): Promise<User[]>;
-  getUserById(id: string): Promise<User | undefined>;
-  createUser(user: User): Promise<User>;
-  updateUser(id: string, user: User): Promise<User>;
+  getAllUsers(): Promise<IUser[]>;
+  getUserById(id: string): Promise<IUser | null>;
+  getUserByEmail(email: string): Promise<IUser | null>;
+  createUser(data: CreateUserDTO): Promise<IUser>;
+  updateUser(id: IUser["id"], data: UpdateUserDTO): Promise<IUser>;
   deleteUser(id: string): Promise<void>;
 }

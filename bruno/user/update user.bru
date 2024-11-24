@@ -1,0 +1,17 @@
+meta {
+  name: update user
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/user/a0f2ecda-4169-4527-ae8a-21ad29cbd15d
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "John Due"
+  }
+}

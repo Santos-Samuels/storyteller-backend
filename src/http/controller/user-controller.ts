@@ -1,46 +1,81 @@
-import { User } from "@/infra/database/entities/user";
+import { CreateUserDTO, UpdateUserDTO } from "@/domain/dtos/user.dto";
 import { UserRepository } from "@/infra/database/repositories/user-repository";
 import { Request, Response } from "express";
 
-export class UserController {
-  private userRepositoy = new UserRepository();
-  // constructor(private userRepositoy: UserRepositoyInterface) {}
+const userRepositoy = new UserRepository();
 
-  async getAllUsers(req: Request, res: Response): Promise<void> {
-    const users = await this.userRepositoy.getAllUsers();
-    res.json(users);
+export class UserController {
+  async getAllUsers(_req: Request, res: Response): Promise<void> {
+    try {
+      const users = await userRepositoy.getAllUsers();
+      res.status(200).send(users);
+    } catch (error: any) {
+      res.status(500).send(error.message);
+    }
   }
 
   async getUserById(req: Request, res: Response): Promise<void> {
-    const id = req.params.id;
-    const user = await this.userRepositoy.getUserById(id);
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send("User not found");
+    try {
+      const userId = req.params.id;
+      const user = await userRepositoy.getUserById(userId);
+
+      if (!user) {
+        res.status(404).send("User not found");
+        return;
+      }
+
+      res.status(200).send(user);
+    } catch (error: any) {
+      res.status(500).send(error.message);
     }
   }
 
   async createUser(req: Request, res: Response): Promise<void> {
-    const user = req.body as User;
-    const newUser = await this.userRepositoy.createUser(user);
-    res.status(201).json(newUser);
+    try {
+      const user = req.body as CreateUserDTO;
+      const newUser = await userRepositoy.createUser(user);
+      res.status(201).send(newUser);
+    } catch (error: any) {
+      res.status(400).send(error.message);
+    }
   }
 
   async updateUser(req: Request, res: Response): Promise<void> {
-    const id = req.params.id;
-    const userData = req.body;
-    const updatedUser = await this.userRepositoy.updateUser(id, userData);
-    if (updatedUser) {
-      res.json(updatedUser);
-    } else {
-      res.status(404).send("User not found");
+    try {
+      const userId = req.params.id;
+      const payload = req.body as UpdateUserDTO;
+
+      const foundUser = await userRepositoy.getUserById(userId);
+
+      if (!foundUser) {
+        res.status(404).send("User not found");
+        return;
+      }
+
+      const updatedUser = await userRepositoy.updateUser({
+        name: payload.name,
+      });
+
+      res.status(200).send(updatedUser);
+    } catch (error: any) {
+      res.status(400).send(error.message);
     }
   }
 
   async deleteUser(req: Request, res: Response): Promise<void> {
-    const id = req.params.id;
-    await this.userRepositoy.deleteUser(id);
-    res.status(204).send();
+    try {
+      const userId = req.params.id;
+      const foundUser = await userRepositoy.getUserById(userId);
+
+      if (!foundUser) {
+        res.status(404).send("User not found");
+        return;
+      }
+
+      await userRepositoy.deleteUser(userId);
+      res.status(204).send();
+    } catch (error: any) {
+      res.status(400).send(error.message);
+    }
   }
 }
