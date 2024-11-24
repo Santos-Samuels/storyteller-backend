@@ -17,30 +17,30 @@ model role {
 }
 
 model user {
-  id              String            @id() @default(uuid())
-  name            String
-  email           String            @unique
-  password        String
-  roleId          String
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @default(now())
- 
+  id        String   @id() @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  roleId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
   role            role              @relation(fields: [roleId], references: [id])
   story           story[]
   userInteraction userInteraction[]
 }
 
 model story {
-  id            String  @id() @default(uuid())
+  id            String @id() @default(uuid())
   theme         String
   title         String
   into          String
   summary       String
-  backgroundUrl String?
+  backgroundUrl String
   authorId      String
 
   author          user              @relation(fields: [authorId], references: [id])
-  character        character[]
+  character       character[]
   sceneCharacter  sceneCharacter[]
   userInteraction userInteraction[]
 
@@ -48,19 +48,13 @@ model story {
   updatedAt DateTime @default(now())
 }
 
-enum CharacterPositionEnum {
-  LEFT
-  RIGHT
-  CENTER
-}
-
 model character {
-  id        String                @id() @default(uuid())
+  id        String @id() @default(uuid())
   storyId   String
   name      String
   role      String
-  position  CharacterPositionEnum
-  avatarUrl String?
+  position  String
+  avatarUrl String
 
   story          story            @relation(fields: [storyId], references: [id])
   sceneCharacter sceneCharacter[]
@@ -69,28 +63,16 @@ model character {
   updatedAt DateTime @default(now())
 }
 
-enum CharacterEmotionEnum {
-  HAPPY
-  SAD
-  SURPRISED
-  THINKING
-  CONFUSED
-  VERY_HAPPY
-  NEUTRAL
-  FRUSTRATED
-  EXCITED
-}
-
 model sceneCharacter {
-  id         String               @id() @default(uuid())
+  id          String @id() @default(uuid())
   characterId String
-  storyId    String
-  order      Int
-  speech     String
-  emotion    CharacterEmotionEnum
-  avatarUrl  String?
+  storyId     String
+  order       Int
+  speech      String
+  emotion     String
+  avatarUrl   String
 
-  character              character                @relation(fields: [characterId], references: [id])
+  character             character               @relation(fields: [characterId], references: [id])
   story                 story                   @relation(fields: [storyId], references: [id])
   userInteractionOption userInteractionOption[]
   userInteraction       userInteraction[]
@@ -100,11 +82,11 @@ model sceneCharacter {
 }
 
 model userInteractionOption {
-  id                  String @id() @default(uuid())
-  sceneCharacterId    String
+  id                   String @id() @default(uuid())
+  sceneCharacterId     String
   nextSceneCharacterId String
-  label               String
-  feedback            String
+  label                String
+  feedback             String
 
   sceneCharacter  sceneCharacter    @relation(fields: [sceneCharacterId], references: [id])
   userInteraction userInteraction[]

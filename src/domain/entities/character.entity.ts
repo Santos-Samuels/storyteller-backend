@@ -2,9 +2,9 @@ import { BaseEntity } from "@/application/entities/base-entity";
 import { IStory } from "./story.entity";
 
 enum CharacterPositionEnum {
-  LEFT = "left",
-  RIGHT = "right",
-  CENTER = "center",
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+  CENTER = "CENTER",
 }
 
 export interface ICharacter extends BaseEntity {
@@ -12,6 +12,8 @@ export interface ICharacter extends BaseEntity {
 
   name: string;
   role: string;
-  position: CharacterPositionEnum;
+  position: CharacterPositionEnum | string;
   avatarUrl: string; // no implement
+
+  story?: IStory;
 }
