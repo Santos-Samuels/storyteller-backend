@@ -1,6 +1,7 @@
-import { CreateUserDTO, UpdateUserDTO } from "@/domain/dtos/user.dto";
 import { UserRepository } from "@/infra/database/repositories/user-repository";
 import { Request, Response } from "express";
+import { validateCreateUserBody } from "./schema/user/createUser.schema";
+import { validateUpdateUserBody } from "./schema/user/updateUser.schema";
 
 const userRepositoy = new UserRepository();
 
@@ -32,8 +33,8 @@ export class UserController {
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const user = req.body as CreateUserDTO;
-      const newUser = await userRepositoy.createUser(user);
+      const data = await validateCreateUserBody(req.body);
+      const newUser = await userRepositoy.createUser(data);
       res.status(201).send(newUser);
     } catch (error: any) {
       res.status(400).send(error.message);
@@ -43,7 +44,6 @@ export class UserController {
   async updateUser(req: Request, res: Response): Promise<void> {
     try {
       const userId = req.params.id;
-      const payload = req.body as UpdateUserDTO;
 
       const foundUser = await userRepositoy.getUserById(userId);
 
@@ -52,8 +52,9 @@ export class UserController {
         return;
       }
 
-      const updatedUser = await userRepositoy.updateUser({
-        name: payload.name,
+      const data = await validateUpdateUserBody(req.body);
+      const updatedUser = await userRepositoy.updateUser(userId, {
+        name: data.name,
       });
 
       res.status(200).send(updatedUser);

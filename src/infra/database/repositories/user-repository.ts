@@ -28,12 +28,10 @@ export class UserRepository implements UserRepositoryInterface {
     });
   };
 
-  updateUser = async ({ userId, name }: UpdateUserDTO) => {
+  updateUser = async (id: IUser["id"], data: UpdateUserDTO) => {
     return this.userRepository.update({
-      where: { id: userId },
-      data: {
-        name,
-      },
+      where: { id },
+      data,
     });
   };
 
