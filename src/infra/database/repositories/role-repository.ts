@@ -1,31 +1,15 @@
+import { IRole } from "@/domain/entities/role.entity";
 import { RoleRepositoryInterface } from "@/domain/repositories/role-repository.interface";
-import { Role } from "../entities/role";
-import { dataSource } from "../type-orm/typeorm.config";
-
-// console.log("🚀 ~ repository:", this.roleRepository);
+import prisma from "../prisma/prisma";
 
 export class RoleRepository implements RoleRepositoryInterface {
-  private roleRepository = dataSource.getRepository(Role);
+  private roleRepository = prisma.role;
 
   getAllRoles = async () => {
-    return this.roleRepository.find();
+    return this.roleRepository.findMany();
   };
 
-  getRoleById = async (id: string): Promise<Role | undefined> => {
-    const role = await this.roleRepository.findOne({ where: { id } });
-    return role ?? undefined;
-  };
-
-  createRole = async (role: Role) => {
-    return this.roleRepository.save(role);
-  };
-
-  updateRole = async (id: string, role: Role) => {
-    await this.roleRepository.update(id, role);
-    return role;
-  };
-
-  deleteRole = async (id: string) => {
-    await this.roleRepository.delete(id);
+  getRoleById = async (id: string): Promise<IRole | null> => {
+    return this.roleRepository.findUnique({ where: { id } });
   };
 }
