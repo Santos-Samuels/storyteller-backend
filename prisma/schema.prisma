@@ -24,6 +24,7 @@ model user {
   roleId          String
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @default(now())
+ 
   role            role              @relation(fields: [roleId], references: [id])
   story           story[]
   userInteraction userInteraction[]
@@ -38,9 +39,10 @@ model story {
   backgroundUrl String?
   authorId      String
 
-  author         user             @relation(fields: [authorId], references: [id])
-  caracter       caracter[]
-  sceneCharacter sceneCharacter[]
+  author          user              @relation(fields: [authorId], references: [id])
+  character        character[]
+  sceneCharacter  sceneCharacter[]
+  userInteraction userInteraction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -52,7 +54,7 @@ enum CharacterPositionEnum {
   CENTER
 }
 
-model caracter {
+model character {
   id        String                @id() @default(uuid())
   storyId   String
   name      String
@@ -62,6 +64,9 @@ model caracter {
 
   story          story            @relation(fields: [storyId], references: [id])
   sceneCharacter sceneCharacter[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 enum CharacterEmotionEnum {
@@ -78,36 +83,49 @@ enum CharacterEmotionEnum {
 
 model sceneCharacter {
   id         String               @id() @default(uuid())
-  caracterId String
+  characterId String
   storyId    String
   order      Int
   speech     String
   emotion    CharacterEmotionEnum
   avatarUrl  String?
 
-  caracter caracter @relation(fields: [caracterId], references: [id])
-  story    story    @relation(fields: [storyId], references: [id])
-  userInteraction userInteraction[]
+  character              character                @relation(fields: [characterId], references: [id])
+  story                 story                   @relation(fields: [storyId], references: [id])
+  userInteractionOption userInteractionOption[]
+  userInteraction       userInteraction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model userInteractionOption {
   id                  String @id() @default(uuid())
-  userInteractionId   String
-  nextScaneCaracterId String
+  sceneCharacterId    String
+  nextSceneCharacterId String
   label               String
   feedback            String
 
-  userInteraction userInteraction? @relation(fields: [userInteractionId], references: [id])
+  sceneCharacter  sceneCharacter    @relation(fields: [sceneCharacterId], references: [id])
+  userInteraction userInteraction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model userInteraction {
   id                      String @id() @default(uuid())
   userId                  String
+  storyId                 String
   sceneCharacterId        String
   userInteractionOptionId String
   situation               String
 
-  user                  user                    @relation(fields: [userId], references: [id])
-  sceneCharacter        sceneCharacter          @relation(fields: [sceneCharacterId], references: [id])
-  userInteractionOption userInteractionOption[]
+  user                  user                  @relation(fields: [userId], references: [id])
+  sceneCharacter        sceneCharacter        @relation(fields: [sceneCharacterId], references: [id])
+  story                 story                 @relation(fields: [storyId], references: [id])
+  userInteractionOption userInteractionOption @relation(fields: [userInteractionOptionId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

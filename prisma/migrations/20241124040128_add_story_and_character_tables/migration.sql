@@ -20,25 +20,30 @@ CREATE TABLE "story" (
 );
 
 -- CreateTable
-CREATE TABLE "caracter" (
+CREATE TABLE "character" (
     "id" TEXT NOT NULL,
     "storyId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "role" TEXT NOT NULL,
     "position" "CharacterPositionEnum" NOT NULL,
     "avatarUrl" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "caracter_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "character_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "sceneCharacter" (
     "id" TEXT NOT NULL,
-    "caracterId" TEXT NOT NULL,
+    "characterId" TEXT NOT NULL,
+    "storyId" TEXT NOT NULL,
     "order" INTEGER NOT NULL,
     "speech" TEXT NOT NULL,
     "emotion" "CharacterEmotionEnum" NOT NULL,
     "avatarUrl" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "sceneCharacter_pkey" PRIMARY KEY ("id")
 );
@@ -47,7 +52,10 @@ CREATE TABLE "sceneCharacter" (
 ALTER TABLE "story" ADD CONSTRAINT "story_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "caracter" ADD CONSTRAINT "caracter_storyId_fkey" FOREIGN KEY ("storyId") REFERENCES "story"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "character" ADD CONSTRAINT "character_storyId_fkey" FOREIGN KEY ("storyId") REFERENCES "story"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "sceneCharacter" ADD CONSTRAINT "sceneCharacter_caracterId_fkey" FOREIGN KEY ("caracterId") REFERENCES "caracter"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "sceneCharacter" ADD CONSTRAINT "sceneCharacter_characterId_fkey" FOREIGN KEY ("characterId") REFERENCES "character"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "sceneCharacter" ADD CONSTRAINT "sceneCharacter_storyId_fkey" FOREIGN KEY ("storyId") REFERENCES "story"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
