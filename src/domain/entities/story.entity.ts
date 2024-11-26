@@ -1,14 +1,16 @@
 import { BaseEntity } from "@/application/entities/base-entity";
-import { IScene } from "./scene.entity";
-import { User } from "./user.entity";
+import { ICharacter } from "./caracter.entity";
+import { ISceneCharacter } from "./scene-caracter.entity";
+import { IUser } from "./user.entity";
 
 export interface IStory extends BaseEntity {
-  userId: User["id"];
   theme: string;
+  title: string;
+  intro: string;
   summary: string;
-  ramifications?: string[];
-  isRamification?: boolean;
+  backgroundUrl: string; // no implement
+  authorId: IUser["id"];
 
-  user?: User;
-  scenes?: IScene[];
+  characters?: ICharacter[];
+  sceneCaracters?: ISceneCharacter[];
 }

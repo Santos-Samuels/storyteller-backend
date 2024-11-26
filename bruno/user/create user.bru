@@ -1,0 +1,20 @@
+meta {
+  name: create user
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/user
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "John Due",
+    "email": "john.due@email.com",
+    "password": "12345678",
+    "roleId": "c49b1468-de38-4522-9748-cc89609bfe42"
+  }
+}

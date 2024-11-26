@@ -1,5 +1,5 @@
 import { BaseEntity } from "@/application/entities/base-entity";
 
-export interface Role extends BaseEntity {
+export interface IRole extends BaseEntity {
   name: string;
 }
