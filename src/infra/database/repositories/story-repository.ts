@@ -117,11 +117,8 @@ export class StoryRepository implements StoryRepositoryInterface {
         character: true,
         sceneCharacter: {
           include: {
-            userInteraction: {
-              include: {
-                userInteractionOption: true,
-              },
-            },
+            userInteraction: true,
+            userInteractionOption: true,
           },
         },
       },

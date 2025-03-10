@@ -7,7 +7,6 @@ import { IUser } from "./user.entity";
 export interface IUserInteraction extends BaseEntity {
   storyId: IStory["id"];
   sceneCharacterId: ISceneCharacter["id"];
-  userInteractionOptionId: IUserInteractionOption["id"];
 
   sentence: string;
 
