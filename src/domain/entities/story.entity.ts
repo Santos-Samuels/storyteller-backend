@@ -1,6 +1,6 @@
 import { BaseEntity } from "@/application/entities/base-entity";
-import { ICharacter } from "./caracter.entity";
-import { ISceneCharacter } from "./scene-caracter.entity";
+import { ICharacter } from "./character.entity";
+import { ISceneCharacter } from "./scene-character.entity";
 import { IUser } from "./user.entity";
 
 export interface IStory extends BaseEntity {
@@ -12,5 +12,5 @@ export interface IStory extends BaseEntity {
   authorId: IUser["id"];
 
   characters?: ICharacter[];
-  sceneCaracters?: ISceneCharacter[];
+  sceneCharacters?: ISceneCharacter[];
 }

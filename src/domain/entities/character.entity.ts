@@ -1,7 +1,7 @@
 import { BaseEntity } from "@/application/entities/base-entity";
 import { IStory } from "./story.entity";
 
-enum CharacterPositionEnum {
+export enum CharacterPositionEnum {
   LEFT = "LEFT",
   RIGHT = "RIGHT",
   CENTER = "CENTER",

@@ -9,7 +9,7 @@ CREATE TABLE "story" (
     "id" TEXT NOT NULL,
     "theme" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "into" TEXT NOT NULL,
+    "intro" TEXT NOT NULL,
     "summary" TEXT NOT NULL,
     "backgroundUrl" TEXT,
     "authorId" TEXT NOT NULL,

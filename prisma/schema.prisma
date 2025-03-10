@@ -27,14 +27,13 @@ model user {
 
   role            role              @relation(fields: [roleId], references: [id])
   story           story[]
-  userInteraction userInteraction[]
 }
 
 model story {
   id            String @id() @default(uuid())
   theme         String
   title         String
-  into          String
+  intro         String
   summary       String
   backgroundUrl String
   authorId      String
@@ -89,7 +88,6 @@ model userInteractionOption {
   feedback             String
 
   sceneCharacter  sceneCharacter    @relation(fields: [sceneCharacterId], references: [id])
-  userInteraction userInteraction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -97,16 +95,12 @@ model userInteractionOption {
 
 model userInteraction {
   id                      String @id() @default(uuid())
-  userId                  String
   storyId                 String
   sceneCharacterId        String
-  userInteractionOptionId String
-  situation               String
+  sentence               String
 
-  user                  user                  @relation(fields: [userId], references: [id])
   sceneCharacter        sceneCharacter        @relation(fields: [sceneCharacterId], references: [id])
   story                 story                 @relation(fields: [storyId], references: [id])
-  userInteractionOption userInteractionOption @relation(fields: [userInteractionOptionId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

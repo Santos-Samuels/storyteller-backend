@@ -1,4 +1,5 @@
-export const storyOutputFormatPrompt = `enum CharacterEmotionEnum {
+export const expectedStoryOutputFormatPrompt = `
+enum CharacterEmotionEnum {
   HAPPY = "happy",
   SAD = "sad",
   SURPRISED = "surprised",
@@ -16,14 +17,19 @@ enum ScenePositionEnum {
   CENTER = "center",
 }
 
+export enum CharacterGenderEnum {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+}
+
 interface Character {
   id: string;
-  storyId: IStory["id"];
 
   name: string;
   role: string;
   position: ScenePositionEnum;
   avatarUrl: string; // no implement
+  gender: CharacterGenderEnum;
 }
 
 interface ISceneCharacter {
@@ -46,34 +52,23 @@ interface IStory {
   backgroundUrl: string; // no implement
   
   characters?: Character[];
-  sceneCaracters?: ISceneCharacter[];
+  sceneCharacters?: ISceneCharacter[];
 }
 
 interface IUserInteraction {
   id: string;
-  sceneCharacteId: ISceneCharacter["id"];
+  storyId: IStory["id"];
+  sceneCharacterId: ISceneCharacter["id"];
 
-  situation: string;
-
-  options?: IUserInteractionOption[];
+  sentence: string;
+  options: IUserInteractionOption[];
 }
 
 interface IUserInteractionOption {
   id: string;
-  interactionId: IUserInteraction["id"];
-  nextSceneCharacteId: ISceneCharacter["id"];
+  sceneCharacterId: ISceneCharacter["id"];
+  nextSceneCharacterId: ISceneCharacter["id"];
 
   label: string;
   feedback: string;
 }`;
-
-// Crie uma história interativa sobre o tema {theme}, na qual ser um diálogo entre {amountCharacter} personagens.
-
-// Regras obrigatórias para a criação da história:
-// - A história deve ter um início, meio e fim.
-// - Cada interação feita deve impactar no desenrolar da história.
-// - O diálogo deve ser coerente e seguir uma linha de raciocínio.
-// - Deve haver no mínimo {amountScenes} cenas.
-// - Nem todas as cenas precisam ter interações.
-// - O retorno deve ser no formato JSON.
-// - O JSON deve incluir todas as cenas.

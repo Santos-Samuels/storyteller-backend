@@ -4,8 +4,21 @@ meta {
   seq: 2
 }
 
-get {
-  url: armengue-delta-backup-production.up.railway.app/
-  body: none
+post {
+  url: http://localhost:11434/api/chat
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "model": "deepseek-coder",
+    "response_format": { "type": "json_object" },
+    "messages": [
+      {
+        "role": "user",
+        "content": "why is the sky blue?"
+      }
+    ]
+  }
 }

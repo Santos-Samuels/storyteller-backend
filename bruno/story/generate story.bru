@@ -1,0 +1,18 @@
+meta {
+  name: generate story
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/story/generate
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "theme": "Dieta Cutting",
+    "amountScenes": 30
+  }
+}

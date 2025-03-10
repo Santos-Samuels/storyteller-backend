@@ -1,15 +1,52 @@
+import { IUser } from "./user.entity";
 
-type GPTStoryScene = {
-  // speech: ICaracterScene["speech"];
-  // emotion: ICaracterScene["emotion"];
-  // position: ICaracterScene["position"];
-  // ramificationTheme?: string;
-};
 export interface IGPTStory {
-  // theme: IStory["theme"];
-  // summary: IStory["summary"];
-  // ramifications: IStory["ramifications"];
-  // isRamification: IStory["isRamification"];
+  id: string;
+  theme: string;
+  title: string;
+  intro: string;
+  summary: string;
+  backgroundUrl: string; // no implement
+  authorId: IUser["id"];
 
-  // scenes: GPTStoryScene[];
+  characters: GPTCharacter[];
+  sceneCharacters: GPTSceneCharacter[];
+}
+
+export interface GPTCharacter {
+  id: string;
+  name: string;
+  role: string;
+  position: string;
+  avatarUrl: string; // no implement
+}
+
+export interface GPTSceneCharacter {
+  id: string;
+  characterId: string;
+  characterPosition?: string;
+  order: number;
+  speech: string;
+  emotion: string;
+  avatarUrl: string; // no implement
+
+  interaction: GPTUserInteraction;
+}
+
+interface GPTUserInteraction {
+  id: string;
+  sceneCharacterId: string;
+
+  sentence: string;
+
+  options: GPTUserInteractionOption[];
+}
+
+interface GPTUserInteractionOption {
+  id: string;
+  sceneCharacterId: string;
+  nextSceneCharacterId: string;
+
+  label: string;
+  feedback: string;
 }
