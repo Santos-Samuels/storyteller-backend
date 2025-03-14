@@ -3,6 +3,10 @@ import zod from "zod";
 export const validateCreateStoryBody = async (data: unknown) => {
   return zod
     .object({
+      id: zod.string({
+        required_error: "id is required",
+        invalid_type_error: "id must be a string",
+      }),
       theme: zod.string({
         required_error: "theme is required",
         invalid_type_error: "theme must be a string",
@@ -11,7 +15,7 @@ export const validateCreateStoryBody = async (data: unknown) => {
         required_error: "title is required",
         invalid_type_error: "title must be a string",
       }),
-      intro: zod.string({ // Corrigido de "into" para "intro"
+      intro: zod.string({
         required_error: "intro is required",
         invalid_type_error: "intro must be a string",
       }),
@@ -23,13 +27,9 @@ export const validateCreateStoryBody = async (data: unknown) => {
         required_error: "backgroundUrl is required",
         invalid_type_error: "backgroundUrl must be a string",
       }),
-      authorId: zod.string({ // Adicionado para corresponder à tipagem
-        required_error: "authorId is required",
-        invalid_type_error: "authorId must be a string",
-      }),
 
       characters: characterScheme,
-      sceneCharacters: sceneCharacterScheme, // Corrigido nome da variável
+      sceneCharacters: sceneCharacterScheme,
     })
     .parseAsync(data)
     .catch((error) => {
@@ -118,21 +118,24 @@ const sceneCharacterScheme = zod
         required_error: "avatarUrl is required in sceneCharacter",
         invalid_type_error: "avatarUrl must be a string in sceneCharacter",
       }),
-      interaction: zod.object({
-        id: zod.string({
-          required_error: "id is required in interaction",
-          invalid_type_error: "id must be a string in interaction",
-        }),
-        sceneCharacterId: zod.string({
-          required_error: "sceneCharacterId is required in interaction",
-          invalid_type_error: "sceneCharacterId must be a string in interaction",
-        }),
-        sentence: zod.string({
-          required_error: "sentence is required in interaction",
-          invalid_type_error: "sentence must be a string in interaction",
-        }),
-        options: interactionOptionScheme,
-      }),
+      interaction: zod
+        .object({
+          id: zod.string({
+            required_error: "id is required in interaction",
+            invalid_type_error: "id must be a string in interaction",
+          }),
+          sceneCharacterId: zod.string({
+            required_error: "sceneCharacterId is required in interaction",
+            invalid_type_error:
+              "sceneCharacterId must be a string in interaction",
+          }),
+          sentence: zod.string({
+            required_error: "sentence is required in interaction",
+            invalid_type_error: "sentence must be a string in interaction",
+          }),
+          options: interactionOptionScheme,
+        })
+        .optional(),
     })
   )
-  .nonempty("sceneCharacters array must have at least one sceneCharacter"); // Adicionado .nonempty()
+  .nonempty("sceneCharacters array must have at least one sceneCharacter");

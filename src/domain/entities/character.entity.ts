@@ -14,6 +14,7 @@ export interface ICharacter extends BaseEntity {
   role: string;
   position: CharacterPositionEnum | string;
   avatarUrl: string; // no implement
+  gender: string;
 
   story?: IStory;
 }

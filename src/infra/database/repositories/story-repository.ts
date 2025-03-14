@@ -10,95 +10,69 @@ import prisma from "../prisma/prisma";
 export class StoryRepository implements StoryRepositoryInterface {
   private storyRepository = prisma.story;
 
-  createStory = async (data: CreateStoryDTO): Promise<IStory> => {
+  createStory = async (data: CreateStoryDTO): Promise<void> => {
     return prisma.$transaction(async (trx) => {
       const story = await trx.story.create({
         data: {
-          ...data.story,
+          id: data.story.id,
+          title: data.story.title,
+          intro: data.story.intro,
+          summary: data.story.summary,
+          backgroundUrl: data.story.backgroundUrl,
+          theme: data.story.theme,
           authorId: data.userId,
+          characters: {
+            createMany: {
+              data: data.story.characters.map((character) => ({
+                id: character.id,
+                name: character.name,
+                role: character.role,
+                position: character.position,
+                avatarUrl: character.avatarUrl,
+                gender: character.gender,
+              })),
+            },
+          },
+          sceneCharacters: {
+            createMany: {
+              data: data.story.sceneCharacters.map((sceneCharacter) => ({
+                id: sceneCharacter.id,
+                characterId: sceneCharacter.characterId,
+                order: sceneCharacter.order,
+                speech: sceneCharacter.speech,
+                emotion: sceneCharacter.emotion,
+                avatarUrl: sceneCharacter.avatarUrl,
+              })),
+            },
+          },
         },
       });
 
-      const characters = await Promise.all(
-        data.story.characters?.map((character) => {
-          return trx.character.create({
-            data: {
-              ...character,
-              storyId: story.id,
-            },
-          });
-        })
-      );
-
-      const sceneCharacters = await Promise.all(
+      await Promise.all(
         data.story.sceneCharacters.map(async (sceneCharacter) => {
-          const characterId = characters.find(
-            (character) =>
-              character.position === sceneCharacter.characterPosition
-          )?.id;
-
-          if (!characterId) {
-            throw new Error("Character not found");
-          }
-
-          const createdSceneCharacter = await trx.sceneCharacter.create({
-            data: {
-              ...sceneCharacter,
-              characterId,
-              storyId: story.id,
-            },
-          });
+          if (!sceneCharacter.interaction) return;
 
           const createdInteraction = await trx.userInteraction.create({
             data: {
-              ...sceneCharacter.interaction,
+              id: sceneCharacter.interaction.id,
+              sentence: sceneCharacter.interaction.sentence,
+              sceneCharacterId: sceneCharacter.interaction.sceneCharacterId,
               storyId: story.id,
-              sceneCharacterId: createdSceneCharacter.id,
             },
           });
 
-          const createdOptions = await Promise.all(
-            sceneCharacter.interaction.options.map((option) => {
-              return trx.userInteractionOption.create({
-                data: { ...option, sceneCharacterId: createdSceneCharacter.id },
-              });
-            })
-          );
-
-          return {
-            ...createdSceneCharacter,
-            interaction: {
-              ...createdInteraction,
-              options: createdOptions,
-            },
-          };
+          await trx.userInteractionOption.createMany({
+            data: sceneCharacter.interaction.options.map((option) => ({
+              id: option.id,
+              sceneCharacterId: option.sceneCharacterId,
+              nextSceneCharacterId: option.nextSceneCharacterId,
+              label: option.label,
+              feedback: option.feedback,
+              interactionId: createdInteraction.id,
+            })),
+          });
         })
       );
-
-      // populate interection option nextSceneCharacterId
-      // sceneCharacters.forEach((sceneCharacter) => {
-      //   const interaction = sceneCharacter.interaction;
-      //   const options = interaction.options;
-
-      //   options.forEach((option) => {
-      //     const nextSceneCharacter = sceneCharacters.find(
-      //       (sceneCharacter) =>
-      //         sceneCharacter.id === option.nextSceneCharacterId
-      //     );
-
-      //     if (!nextSceneCharacter) {
-      //       throw new Error("Next scene character not found");
-      //     }
-
-      //     option.nextSceneCharacterId = nextSceneCharacter.id;
-      //   });
-      // });
-
-      return {
-        ...story,
-        characters,
-        sceneCharacters,
-      };
     });
   };
 
@@ -114,11 +88,15 @@ export class StoryRepository implements StoryRepositoryInterface {
         id,
       },
       include: {
-        character: true,
-        sceneCharacter: {
+        author: true,
+        characters: true,
+        sceneCharacters: {
           include: {
-            userInteraction: true,
-            userInteractionOption: true,
+            interaction: {
+              include: {
+                options: true,
+              },
+            },
           },
         },
       },

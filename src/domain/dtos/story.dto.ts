@@ -10,7 +10,7 @@ export interface GenerateStoryDTO {
 }
 
 export interface CreateStoryDTO {
-  story: Omit<IGPTStory, "id">;
+  story: IGPTStory;
   userId: string; // get from token
 }
 

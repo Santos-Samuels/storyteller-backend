@@ -25,8 +25,8 @@ model user {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  role            role              @relation(fields: [roleId], references: [id])
-  story           story[]
+  role  role    @relation(fields: [roleId], references: [id])
+  story story[]
 }
 
 model story {
@@ -38,10 +38,9 @@ model story {
   backgroundUrl String
   authorId      String
 
-  author          user              @relation(fields: [authorId], references: [id])
-  character       character[]
-  sceneCharacter  sceneCharacter[]
-  userInteraction userInteraction[]
+  author          user             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  characters      character[]
+  sceneCharacters sceneCharacter[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -54,8 +53,9 @@ model character {
   role      String
   position  String
   avatarUrl String
+  gender    String
 
-  story          story            @relation(fields: [storyId], references: [id])
+  story          story            @relation(fields: [storyId], references: [id], onDelete: Cascade)
   sceneCharacter sceneCharacter[]
 
   createdAt DateTime @default(now())
@@ -71,13 +71,14 @@ model sceneCharacter {
   emotion     String
   avatarUrl   String
 
-  character             character               @relation(fields: [characterId], references: [id])
-  story                 story                   @relation(fields: [storyId], references: [id])
-  userInteractionOption userInteractionOption[]
-  userInteraction       userInteraction[]
+  character character @relation(fields: [characterId], references: [id])
+  story     story     @relation(fields: [storyId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  options     userInteractionOption[]
+  interaction userInteraction?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
 }
 
 model userInteractionOption {
@@ -86,21 +87,23 @@ model userInteractionOption {
   nextSceneCharacterId String
   label                String
   feedback             String
+  interactionId        String
 
-  sceneCharacter  sceneCharacter    @relation(fields: [sceneCharacterId], references: [id])
+  sceneCharacter sceneCharacter  @relation(fields: [sceneCharacterId], references: [id], onDelete: Cascade)
+  interaction    userInteraction @relation(fields: [interactionId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
 
 model userInteraction {
-  id                      String @id() @default(uuid())
-  storyId                 String
-  sceneCharacterId        String
-  sentence               String
+  id               String  @id() @default(uuid())
+  storyId          String
+  sentence         String
+  sceneCharacterId String @unique
 
-  sceneCharacter        sceneCharacter        @relation(fields: [sceneCharacterId], references: [id])
-  story                 story                 @relation(fields: [storyId], references: [id])
+  options userInteractionOption[]
+  sceneCharacter        sceneCharacter?        @relation(fields: [sceneCharacterId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

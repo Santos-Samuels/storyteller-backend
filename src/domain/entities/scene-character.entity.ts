@@ -22,8 +22,9 @@ export interface ISceneCharacter extends BaseEntity {
   speech: string;
   emotion: CharacterEmotionEnum | string;
   avatarUrl: string; // no implement
+  interactionId?: IUserInteraction["id"];
 
-  interaction?: IUserInteraction;
+  interaction: IUserInteraction | null;
   character?: ICharacter;
   story?: IStory;
 }

@@ -1,5 +1,4 @@
 import { GenerateStoryUsecase } from "@/application/usecases/story/generate-story.usecase";
-import { GPTCharacter, GPTSceneCharacter } from "@/domain/entities/gpt-story";
 import { ChatGPTApiClient } from "@/infra/chatGPT/chat-gpt-api-client";
 import { StoryRepository } from "@/infra/database/repositories/story-repository";
 import { Request, Response } from "express";
@@ -11,7 +10,7 @@ const chatGPTApiClient = new ChatGPTApiClient();
 const generateStoryUsecase = new GenerateStoryUsecase(chatGPTApiClient);
 
 export class StoryController {
-  private userId = "mockedUserId";
+  private userId = "a6a78d25-ab8e-4a98-a361-e123f1c6dd3a";
 
   generateStory = async (req: Request, res: Response) => {
     try {
@@ -23,45 +22,17 @@ export class StoryController {
     }
   };
 
-  // TODO: move to create-story.usecase
-  private populateSceneCharacterPosition = (
-    sceneCharacters: GPTSceneCharacter[],
-    characters: GPTCharacter[]
-  ) => {
-    return sceneCharacters.map((sceneCharacter) => {
-      const character = characters.find(
-        (character) => character.id === sceneCharacter.characterId
-      );
-
-      if (!character) {
-        throw new Error("Character not found");
-      }
-
-      return {
-        ...sceneCharacter,
-        characterPosition: character.position,
-      };
-    });
-  };
-
   createStory = async (req: Request, res: Response) => {
-    const mockedUserId = "mockedUserId";
-
     try {
       const data = await validateCreateStoryBody(req.body);
 
-      const updatedSceneCharacters = this.populateSceneCharacterPosition(
-        data.sceneCharacters,
-        data.characters
-      );
-
-      const story = await storyRepository.createStory({
-        story: {
-          ...data,
-          sceneCharacters: updatedSceneCharacters,
-        },
-        userId: mockedUserId,
+      await storyRepository.createStory({
+        story: req.body,
+        userId: this.userId,
       });
+
+      const story = await storyRepository.getStoryById(data.id);
+
       return res.send(story).status(201);
     } catch (error: any) {
       res.status(400).send(error.message);

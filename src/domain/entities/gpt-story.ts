@@ -18,24 +18,27 @@ export interface GPTCharacter {
   name: string;
   role: string;
   position: string;
+  gender: string;
   avatarUrl: string; // no implement
+  storyId: string;
 }
 
 export interface GPTSceneCharacter {
   id: string;
   characterId: string;
-  characterPosition?: string;
   order: number;
   speech: string;
   emotion: string;
   avatarUrl: string; // no implement
+  storyId: string;
 
-  interaction: GPTUserInteraction;
+  interaction?: GPTUserInteraction;
 }
 
 interface GPTUserInteraction {
   id: string;
   sceneCharacterId: string;
+  storyId: string;
 
   sentence: string;
 

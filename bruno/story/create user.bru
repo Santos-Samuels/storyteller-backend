@@ -6,6 +6,124 @@ meta {
 
 post {
   url: {{baseUrl}}/api/story
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "id": "be533a16-4b4e-4aea-9c3d-f6e23498b7c7",
+    "theme": "Dieta Cutting",
+    "title": "O Desafio do Cutting",
+    "intro": "João decidiu que era hora de entrar em forma e escolheu a dieta cutting para isso. Ele compartilha sua jornada com sua amiga Ana, que está curiosa para saber mais sobre o processo.",
+    "summary": "João e Ana discutem sobre a dieta cutting, as dificuldades e as motivações que mantêm João no caminho certo. Ana aprende mais sobre a importância da alimentação e do equilíbrio.",
+    "backgroundUrl": "",
+    "characters": [
+      {
+        "id": "0e9c4f61-7f1e-412f-a4ac-60d67343101a",
+        "name": "João",
+        "role": "Protagonista",
+        "position": "left",
+        "avatarUrl": "",
+        "gender": "MALE"
+      },
+      {
+        "id": "59631aff-a893-45fb-912f-bcf70de038e3",
+        "name": "Ana",
+        "role": "Amiga de João",
+        "position": "right",
+        "avatarUrl": "",
+        "gender": "FEMALE"
+      }
+    ],
+    "sceneCharacters": [
+      {
+        "id": "7816e9ee-f8ca-468c-9b63-295f5830e8e5",
+        "characterId": "0e9c4f61-7f1e-412f-a4ac-60d67343101a",
+        "order": 1,
+        "speech": "Ei, Ana! Comecei uma dieta cutting para perder peso e definir os músculos.",
+        "emotion": "EXCITED",
+        "avatarUrl": ""
+      },
+      {
+        "id": "00929c2b-7e73-4791-8710-714c61ade2e9",
+        "characterId": "59631aff-a893-45fb-912f-bcf70de038e3",
+        "order": 2,
+        "speech": "Sério, João? Como funciona essa dieta?",
+        "emotion": "CURIOUS",
+        "avatarUrl": ""
+      },
+      {
+        "id": "a9e2551a-ef95-4d4e-b210-d3c8c9b4e310",
+        "characterId": "0e9c4f61-7f1e-412f-a4ac-60d67343101a",
+        "order": 3,
+        "speech": "Basicamente, estou reduzindo minha ingestão calórica e aumentando a atividade física para queimar gordura.",
+        "emotion": "THINKING",
+        "avatarUrl": ""
+      },
+      {
+        "id": "53fb8acd-c44f-41ed-9fc7-ec9ef765bfd6",
+        "characterId": "0e9c4f61-7f1e-412f-a4ac-60d67343101a",
+        "order": 4,
+        "speech": "Às vezes é difícil resistir às tentações, mas eu preciso ser disciplinado.",
+        "emotion": "FRUSTRATED",
+        "avatarUrl": "",
+        "interaction": {
+          "id": "c21453ad-4273-483e-902b-46b1fd70f959",
+          "storyId": "be533a16-4b4e-4aea-9c3d-f6e23498b7c7",
+          "sceneCharacterId": "53fb8acd-c44f-41ed-9fc7-ec9ef765bfd6",
+          "sentence": "Como Ana pode ajudar João a se manter motivado?",
+          "options": [
+            {
+              "id": "ccf93f77-f8a8-4421-bf81-ba77e1494880",
+              "sceneCharacterId": "53fb8acd-c44f-41ed-9fc7-ec9ef765bfd6",
+              "nextSceneCharacterId": "29c91877-29eb-4c6a-8630-e1a2461984b2",
+              "label": "Ana sugere que eles cozinhem juntos refeições saudáveis.",
+              "feedback": "Isso daria a João apoio e tornaria a dieta mais divertida."
+            },
+            {
+              "id": "e438a694-be44-4f9c-9b05-bcdf22809f71",
+              "sceneCharacterId": "53fb8acd-c44f-41ed-9fc7-ec9ef765bfd6",
+              "nextSceneCharacterId": "52e382c4-f0d7-4d41-8494-e5010d7f3c8e",
+              "label": "Ana sugere que João tire um dia de folga do regime.",
+              "feedback": "Um dia de folga pode ajudar a aliviar a pressão e recarregar as energias."
+            }
+          ]
+        }
+      },
+      {
+        "id": "29c91877-29eb-4c6a-8630-e1a2461984b2",
+        "characterId": "59631aff-a893-45fb-912f-bcf70de038e3",
+        "order": 5,
+        "speech": "Que tal cozinharmos juntos algumas receitas saudáveis?",
+        "emotion": "HAPPY",
+        "avatarUrl": ""
+      },
+      {
+        "id": "52e382c4-f0d7-4d41-8494-e5010d7f3c8e",
+        "characterId": "59631aff-a893-45fb-912f-bcf70de038e3",
+        "order": 6,
+        "speech": "Não seria bom tirar um dia de folga e relaxar?",
+        "emotion": "THINKING",
+        "avatarUrl": ""
+      },
+      {
+        "id": "f5c61d8b-5661-4db1-bea2-65b9de34acf0",
+        "characterId": "0e9c4f61-7f1e-412f-a4ac-60d67343101a",
+        "order": 7,
+        "speech": "Boa ideia, Ana. Isso pode me ajudar a manter o foco e ainda aproveitar o processo.",
+        "emotion": "VERY_HAPPY",
+        "avatarUrl": ""
+      },
+      {
+        "id": "8f2895d5-f64c-45bd-8566-bf417912b73e",
+        "characterId": "0e9c4f61-7f1e-412f-a4ac-60d67343101a",
+        "order": 8,
+        "speech": "Sim, tirar um dia de folga pode ser ótimo. Vou pensar nisso!",
+        "emotion": "THINKING",
+        "avatarUrl": "",
+        "storyId": "be533a16-4b4e-4aea-9c3d-f6e23498b7c7"
+      }
+    ]
+  }
 }
