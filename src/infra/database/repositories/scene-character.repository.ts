@@ -1,6 +1,5 @@
 import {
-  CreateSceneCharacterDTO,
-  ListSceneCharactersDTO,
+  ListSceneCharactersDTO
 } from "@/domain/dtos/scene-character.dto";
 import { ISceneCharacter } from "@/domain/entities/scene-character.entity";
 import { SceneCharacterRepositoryInterface } from "@/domain/repositories/scene-character-repository.interface";
@@ -22,6 +21,13 @@ export class SceneCharacterRepository
   ): Promise<ISceneCharacter[]> => {
     return this.sceneCharacterRepository.findMany({
       where: params,
+      include: {
+        interaction: {
+          include: {
+            options: true,
+          },
+        },
+      },
     });
   };
 
@@ -31,24 +37,6 @@ export class SceneCharacterRepository
     return this.sceneCharacterRepository.findUnique({
       where: { id },
     }) as unknown as ISceneCharacter;
-  };
-
-  createSceneCharacter = async (
-    data: CreateSceneCharacterDTO
-  ): Promise<ISceneCharacter> => {
-    return this.sceneCharacterRepository.create({
-      data,
-    });
-  };
-
-  updateSceneCharacter = async (
-    id: ISceneCharacter["id"],
-    data: CreateSceneCharacterDTO
-  ): Promise<ISceneCharacter> => {
-    return this.sceneCharacterRepository.update({
-      where: { id },
-      data,
-    });
   };
 
   deleteSceneCharacter = async (id: string): Promise<void> => {

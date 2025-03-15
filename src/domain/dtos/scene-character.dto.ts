@@ -1,5 +1,6 @@
 import { ICharacter } from "../entities/character.entity";
 import { IStory } from "../entities/story.entity";
+import { CreateUserInteractionDTO } from "./user-interaction.dto";
 
 export interface ListSceneCharactersDTO {
   characterId?: ICharacter["id"];
@@ -13,6 +14,7 @@ export interface CreateSceneCharacterDTO {
   speech: string;
   emotion: string;
   avatarUrl: string;
+  interaction?: CreateUserInteractionDTO;
 }
 
 export interface UpdateSceneCharacterDTO {

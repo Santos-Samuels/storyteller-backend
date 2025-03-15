@@ -10,6 +10,7 @@ export interface CreateCharacterDTO {
   role: string;
   position: string;
   avatarUrl: string;
+  gender: string;
 }
 
 export interface UpdateCharacterDTO {

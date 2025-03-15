@@ -12,5 +12,5 @@ export interface CreateUserInteractionDTO {
   userId: IUser["id"];
   storyId: IStory["id"];
   sceneCharacterId: ISceneCharacter["id"];
-  situation: string;
+  sentence: string;
 }

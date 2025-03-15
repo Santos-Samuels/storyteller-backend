@@ -1,6 +1,5 @@
 import {
-  CreateSceneCharacterDTO,
-  ListSceneCharactersDTO,
+  ListSceneCharactersDTO
 } from "../dtos/scene-character.dto";
 import { ISceneCharacter } from "../entities/scene-character.entity";
 
@@ -11,10 +10,10 @@ export interface SceneCharacterRepositoryInterface {
   getSceneCharacterById(
     id: ISceneCharacter["id"]
   ): Promise<ISceneCharacter | null>;
-  createSceneCharacter(data: CreateSceneCharacterDTO): Promise<ISceneCharacter>;
-  updateSceneCharacter(
-    id: ISceneCharacter["id"],
-    data: CreateSceneCharacterDTO
-  ): Promise<ISceneCharacter>;
+  // createSceneCharacter(data: CreateSceneCharacterDTO): Promise<ISceneCharacter>;
+  // updateSceneCharacter(
+  //   id: ISceneCharacter["id"],
+  //   data: CreateSceneCharacterDTO
+  // ): Promise<ISceneCharacter>;
   deleteSceneCharacter(id: ISceneCharacter["id"]): Promise<void>;
 }

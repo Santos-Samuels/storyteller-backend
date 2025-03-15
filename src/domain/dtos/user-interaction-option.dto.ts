@@ -9,6 +9,7 @@ export interface CreateUserInteractionOptionDTO {
   nextSceneCharacterId: ISceneCharacter["id"];
   label: string;
   feedback: string;
+  interactionId: string;
 }
 
 export interface UpdateUserInteractionOptionDTO {
