@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node -r tsconfig-paths/register dist/index.js",
     "prisma:update:types": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev && npx prisma generate"
   },
@@ -26,13 +26,11 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/module-alias": "^2.0.4",
     "@types/uuid": "^9.0.8",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.5"
-  },
-  "_moduleAliases": {
-    "@": "dist/src"
   }
 }

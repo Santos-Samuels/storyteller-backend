@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import "reflect-metadata";
+import './module-alias';
 
 import connectPrismaDatabase from "./infra/database/prisma/prisma.config";
 import roleRoutes from "./infra/routes/express/role.routes";
@@ -9,6 +10,7 @@ import storyRoutes from "./infra/routes/express/story.routes";
 import userRoutes from "./infra/routes/express/user.routes";
 
 dotenv.config({ path: ".env" });
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
